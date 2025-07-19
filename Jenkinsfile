@@ -30,8 +30,8 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    def jarFile = findFiles(glob: 'target/*.jar')[0].path
-                    docker.build("examplecsd/example:latest", "--build-arg JAR_FILE=${jarFile}
+                    def jarFile = findFiles(glob: 'target/*.jar')[0].name
+                    sh "docker build -t examplecsd/example:latest --build-arg JAR_FILE=target/${jarFile} ."
                 }
             }
         }
