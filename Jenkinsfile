@@ -29,9 +29,9 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                echo '🐳 Building Docker image...'
                 script {
-                    docker.build("my-app:${env.BUILD_ID}")
+                    // Явно указываем путь к Dockerfile и контекст сборки
+                    dockerImage = docker.build("my-app:${env.BUILD_NUMBER}", ".")
                 }
             }
         }
