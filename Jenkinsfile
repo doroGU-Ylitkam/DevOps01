@@ -28,12 +28,20 @@ pipeline {
         }
 
        stage('Docker Build') {
-            steps {
-                echo '🐳 Building Docker image...'
-                script {
-                    docker.build("my-app:${env.BUILD_ID}")
-                }
-            }
+    steps {
+        script {
+            // Проверка доступности Docker
+            sh '''
+                echo "Проверка Docker:"
+                docker --version || true
+                ls -l /usr/bin/docker || true
+                ls -l /var/run/docker.sock || true
+            '''
+            
+            // Сборка образа
+            docker.build("my-app:${env.BUILD_ID}")
         }
+    }
+}
     }
 }
