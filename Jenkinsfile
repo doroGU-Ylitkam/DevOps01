@@ -22,26 +22,21 @@ pipeline {
             }
             post {
                 success {
-                    archiveArtifacts 'target/*.jar'  // Сохранение артефакта в Jenkins
+                    archiveArtifacts 'target/*.jar'
                 }
             }
         }
 
-       stage('Docker Build') {
-    steps {
-        script {
-            // Проверка доступности Docker
-            sh '''
-                echo "Проверка Docker:"
-                docker --version || true
-                ls -l /usr/bin/docker || true
-                ls -l /var/run/docker.sock || true
-            '''
-            
-            // Сборка образа
-            docker.build("my-app:${env.BUILD_ID}")
+        stage('Docker Build') {
+            steps {
+                script {
+                    sh '''
+                        echo "Installing Docker inside Jenkins container..."
+                        apt-get update && apt-get install -y docker.io
+                        docker build -t my-app:${BUILD_ID} .
+                    '''
+                }
+            }
         }
-    }
-}
     }
 }
