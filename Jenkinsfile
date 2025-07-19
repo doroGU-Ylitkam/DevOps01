@@ -26,5 +26,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker Build') {
+            steps {
+                echo '🐳 Building Docker image...'
+                script {
+                    docker.build("my-app:${env.BUILD_ID}")
+                }
+            }
+        }
     }
 }
