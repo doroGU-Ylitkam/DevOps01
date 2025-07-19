@@ -30,8 +30,11 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    // Явно указываем путь к Dockerfile и контекст сборки
-                    dockerImage = docker.build("my-app:${env.BUILD_NUMBER}", ".")
+                    // Явная загрузка Docker-объекта
+                    docker.withRegistry('', '') {
+                        def customImage = docker.build("${env.DOCKER_IMAGE}")
+                        echo "Собран образ: ${customImage.id}"
+                    }
                 }
             }
         }
