@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     stages {
-        stage('Prepare') {
+        stage('Test') {
             steps {
-                sh 'chmod +x mvnw'  // Даём права на выполнение
+                echo '🧪 Running tests with Maven...'
+                sh './mvnw test'
             }
-        }
-        stage('Build') {
-            steps {
-                echo '🔨 Building the project with Maven...'
-                sh './mvnw clean package'
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'  // Публикация результатов тестов
+                }
             }
         }
     }
