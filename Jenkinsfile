@@ -27,14 +27,11 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
+       stage('Docker Build') {
             steps {
+                echo '🐳 Building Docker image...'
                 script {
-                    // Явная загрузка Docker-объекта
-                    docker.withRegistry('', '') {
-                        def customImage = docker.build("${env.DOCKER_IMAGE}")
-                        echo "Собран образ: ${customImage.id}"
-                    }
+                    docker.build("my-app:${env.BUILD_ID}")
                 }
             }
         }
