@@ -30,11 +30,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    sh '''
-                        echo "Installing Docker inside Jenkins container..."
-                        apt-get update && apt-get install -y docker.io
-                        docker build -t my-app:${BUILD_ID} .
-                    '''
+                    docker.build("examplecsd/example:latest", "--build-arg JAR_FILE=${jarFile} 
                 }
             }
         }
