@@ -1,5 +1,5 @@
 pipeline {
-    agent none  // Отключаем глобальный агент
+    agent any
 
     stages {
         // Этапы Test и Build остаются без изменений
