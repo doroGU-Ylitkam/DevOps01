@@ -26,13 +26,13 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Docker Build') {
             steps {
                 echo '🐳 Building Docker image...'
                 script {
-                    // Собираем образ с тегом "my-app:latest"
-                    docker.build("my-app:latest")
+                    // Явно указываем путь к docker
+                    sh '/usr/bin/docker build -t my-app:${BUILD_ID} .'
                 }
             }
         }
