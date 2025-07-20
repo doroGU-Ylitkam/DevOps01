@@ -1,11 +1,12 @@
 pipeline {
-    agent any
+    agent none  // Отключаем глобальный агент
 
     stages {
+        // Этапы Test и Build остаются без изменений
         stage('Test') {
+            agent any  // Запускаем на любом агенте
             steps {
-                echo '🧪 Running tests with Maven...'
-                sh 'chmod +x mvnw'
+                echo '🧪 Running tests...'
                 sh './mvnw test'
             }
             post {
@@ -14,11 +15,12 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Build') {
+            agent any
             steps {
-                echo '🔨 Building JAR artifact...'
-                sh './mvnw clean package -DskipTests'  // Сборка без повторного запуска тестов
+                echo '🔨 Building JAR...'
+                sh './mvnw clean package -DskipTests'
             }
             post {
                 success {
@@ -27,12 +29,19 @@ pipeline {
             }
         }
 
+        // Новый этап: сборка Docker-образа через DinD
         stage('Docker Build') {
+            agent {
+                docker {
+                    image 'docker:dind'  // Используем DinD-контейнер
+                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             steps {
                 echo '🐳 Building Docker image...'
                 script {
-                    // Собираем образ с тегом "my-app:latest"
-                    docker.build("my-app:latest")
+                    // Собираем образ (Dockerfile должен быть в корне проекта)
+                    sh 'docker build -t my-app:latest .'
                 }
             }
         }
