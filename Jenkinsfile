@@ -33,7 +33,6 @@ pipeline {
                 script {
                     // Собираем образ с тегом "my-app:latest"
                     docker.build("my-app:latest")
-                    }
                 }
             }
         }
