@@ -27,15 +27,12 @@ pipeline {
             }
         }
 
-        stage('Docker Image') {
+        stage('Docker Build') {
             steps {
+                echo '🐳 Building Docker image...'
                 script {
-                    // Проверяем, есть ли Dockerfile
-                    if (fileExists('Dockerfile')) {
-                        echo '🐳 Building Docker image...'
-                        docker.build("dockerimage/docimage:latest")
-                    } else {
-                        error('Dockerfile not found!')
+                    // Собираем образ с тегом "my-app:latest"
+                    docker.build("my-app:latest")
                     }
                 }
             }
