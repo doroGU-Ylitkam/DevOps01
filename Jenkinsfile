@@ -27,13 +27,13 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
+        stage('Docker Image') {
             steps {
                 script {
                     // Проверяем, есть ли Dockerfile
                     if (fileExists('Dockerfile')) {
                         echo '🐳 Building Docker image...'
-                        docker.build("dockerImage/docImage:latest")
+                        docker.build("dockerimage/docimage:latest")
                     } else {
                         error('Dockerfile not found!')
                     }
