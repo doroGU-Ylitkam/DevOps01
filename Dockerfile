@@ -1,9 +1,11 @@
-FROM jenkins/jenkins:lts-jdk17
-USER root
+# Используем базовый образ с Java (только для запуска JAR)
+FROM eclipse-temurin:17-jre-alpine
 
-# Установка Docker CLI
-RUN curl -fsSL https://get.docker.com -o get-docker.sh && \
-    sh get-docker.sh && \
-    rm get-docker.sh
+# Копируем JAR-артефакт из target/ в образ
+COPY target/*.jar /app/app.jar
 
-USER jenkins
+# Порт, который будет слушать приложение
+EXPOSE 8080
+
+# Команда для запуска
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
