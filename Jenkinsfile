@@ -27,5 +27,18 @@ pipeline {
             }
         }
 
+        stage('Docker Build') {
+            steps {
+                script {
+                    // Проверяем, есть ли Dockerfile
+                    if (fileExists('Dockerfile')) {
+                        echo '🐳 Building Docker image...'
+                        docker.build("dockerImage/docImage:latest")
+                    } else {
+                        error('Dockerfile not found!')
+                    }
+                }
+            }
+        }
     }
 }
