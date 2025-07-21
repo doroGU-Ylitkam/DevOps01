@@ -32,8 +32,7 @@ pipeline {
             steps {
                 echo '🐳 Building Docker image...'
                 script {
-                    // Явно указываем путь к docker
-                    sh '/usr/bin/docker build -t my-app:${BUILD_ID} .'
+                    docker.build("my-app:${env.BUILD_ID}")
                 }
             }
         }
