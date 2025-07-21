@@ -36,7 +36,7 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 script {
-                    // Явно указываем полное имя репозитория
+                    
                     def imageName = "vicryabenko/devops01:${env.BUILD_ID}" 
                     
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
