@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKER_HUB_REPO = 'vicryabenko/devops01'
+        APP_PORT = '8081' 
     }
     
     stages {
