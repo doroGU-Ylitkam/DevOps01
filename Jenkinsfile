@@ -52,14 +52,30 @@ pipeline {
                 }
             }
         }
+        stage('Deploy') {
+            steps {
+                echo '🚀 Deploying Docker container...'
+                script {
+                    // Останавливаем и удаляем старый контейнер (если есть)
+                    sh '''
+                        docker stop my-app || true
+                        docker rm my-app || true
+                    '''
+                    // Запускаем новый контейнер из образа
+                    sh """
+                        docker run -d \
+                            --name my-app \
+                            -p ${env.APP_PORT}:${env.APP_PORT} \
+                            ${env.DOCKER_HUB_REPO}:${env.BUILD_ID}
+                    """
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo "✅ Success! Image pushed to Docker Hub: ${env.DOCKER_HUB_REPO}:${env.BUILD_ID}"
-        }
-        failure {
-            echo "❌ Pipeline failed. Check logs for details."
+            echo "✅ Success! Container is running: http://<SERVER_IP>:${env.APP_PORT}"
         }
     }
 }
