@@ -53,7 +53,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Pull') {
             steps {
                 echo '🚀 Deploying Docker container...'
                 script {
