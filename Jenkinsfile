@@ -36,5 +36,15 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker Push') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                        docker.image("my-app:${env.BUILD_ID}").push()
+                    }
+                }
+            }
+        }
     }
 }
