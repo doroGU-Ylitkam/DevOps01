@@ -34,16 +34,20 @@ pipeline {
         
         stage('Docker Build & Push') {
             steps {
-                echo '🐳 Building and pushing Docker image...'
                 script {
-                    // Логин в Docker Hub
+                    // Явно указываем полное имя репозитория
+                    def imageName = "vicryabenko/devops01:${env.BUILD_ID}" 
+                    
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        // Сборка и тегирование
-                        def image = docker.build("${env.DOCKER_HUB_REPO}:${env.BUILD_ID}")
-                        // Пуш образа
+                        // Собираем образ
+                        def image = docker.build(imageName)
+                        
+                        // Добавляем тег latest
+                        docker.image(imageName).tag('latest')
+                        
+                        // Пушим оба тега
                         image.push()
-                        // Дополнительно: пуш с тегом 'latest'
-                        image.push('latest')
+                        docker.image(imageName).push('latest')
                     }
                 }
             }
