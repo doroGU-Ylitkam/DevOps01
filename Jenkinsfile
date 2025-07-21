@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_HUB_REPO = 'vicryabenko/devops01'
+    }
+    
     stages {
         
         stage('Test') {
@@ -28,23 +32,30 @@ pipeline {
             }
         }
         
-        stage('Docker Build') {
+        stage('Docker Build & Push') {
             steps {
-                echo '🐳 Building Docker image...'
+                echo '🐳 Building and pushing Docker image...'
                 script {
-                    docker.build("my-app:${env.BUILD_ID}")
-                }
-            }
-        }
-
-        stage('Docker Push') {
-            steps {
-                script {
+                    // Логин в Docker Hub
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        docker.image("my-app:${env.BUILD_ID}").push()
+                        // Сборка и тегирование
+                        def image = docker.build("${env.DOCKER_HUB_REPO}:${env.BUILD_ID}")
+                        // Пуш образа
+                        image.push()
+                        // Дополнительно: пуш с тегом 'latest'
+                        image.push('latest')
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Success! Image pushed to Docker Hub: ${env.DOCKER_HUB_REPO}:${env.BUILD_ID}"
+        }
+        failure {
+            echo "❌ Pipeline failed. Check logs for details."
         }
     }
 }
