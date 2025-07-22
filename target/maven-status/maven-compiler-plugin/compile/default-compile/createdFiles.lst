@@ -1,0 +1,5 @@
+ru/infosec/serviceforstudy01/ServiceForStudy01Application.class
+ru/infosec/serviceforstudy01/service/AnswerService.class
+ru/infosec/serviceforstudy01/controller/AnswerController.class
+ru/infosec/serviceforstudy01/modeldto/Answer.class
+ru/infosec/serviceforstudy01/service/impl/AnswerServiceImpl.class
